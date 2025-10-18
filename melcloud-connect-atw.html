@@ -1,0 +1,121 @@
+<script type="text/javascript">
+  RED.nodes.registerType('melcloud-credential-atw',{
+      category: 'config',
+      defaults: {
+          email: {value:"user@domain.com",required:true},
+          password: {value:"password",required:true},
+      },
+      label: function() {
+          return "credentials for " + this.email;
+      }
+  });
+</script>
+
+<script type="text/html" data-template-name="melcloud-credential-atw">
+  <div class="form-row">
+      <label for="node-config-input-email"><i class="fa fa-bookmark"></i> Email</label>
+      <input type="text" id="node-config-input-email">
+  </div>
+  <div class="form-row">
+      <label for="node-config-input-password"><i class="fa fa-bookmark"></i> Password</label>
+      <input type="text" id="node-config-input-password">
+  </div>
+</script>
+
+
+<script type="text/javascript">
+  RED.nodes.registerType("melcloud-device-atw", {
+    category: "input",
+    color: "#ffcc66",
+    defaults: {
+      server: {value:"", type:"melcloud-credential-atw", required: true},
+      buildingid: { value:"" },
+      deviceid: { value:""},
+      settemperaturezone1: { value:"", required: false,  validate:RED.validators.regex(/[0-9\.]*/) },
+      settemperaturezone2: { value:"", required: false,  validate:RED.validators.regex(/[0-9\.]*/) },
+      settanktemperature: { value:"", required: false,  validate:RED.validators.regex(/[0-9\.]*/) },
+      forcehotwatermode: { value:"", required: false },
+
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "feed.png",
+    label: function() {
+      return "melcloud-device-atw : " + this.deviceid ;
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="melcloud-device-atw">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-globe"></i> Credentials</label>
+        <input type="text" id="node-input-server" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-buildingid"><i class="fa fa-building"></i> BuildingID</label>
+        <input type="text" id="node-input-buildingid" />
+    </div>
+    <div class="form-row">
+      <label for="node-input-deviceid"><i class="fa fa-slideshare"></i> DeviceID</label>
+      <input type="text" id="node-input-deviceid" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-settemperaturezone1"><i class="fa fa-thermometer-half"></i> Zone 1 C°</label>
+    <input type="text" id="node-input-settemperaturezone1" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-settemperaturezone2"><i class="fa fa-thermometer-half"></i> Zone 2 C°</label>
+    <input type="text" id="node-input-settemperaturezone2" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-settanktemperature"><i class="fa fa-thermometer-half"></i> Tank C°</label>
+    <input type="text" id="node-input-settanktemperature" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-forcehotwatermode"><i class="fa fa-arrow-circle-right"></i> Force hot water</label>
+    	<select id="node-input-forcehotwatermode">
+      		<option value=""></option>
+      		<option value=true>On</option>
+     		 <option value=false>Off</option>
+   	</select>
+
+  </div>
+
+</script>
+
+
+
+<script type="text/javascript">
+  RED.nodes.registerType("melcloud-connect-atw", {
+    category: "input",
+    color: "#ffcc66",
+    defaults: {
+      server: {value:"", type:"melcloud-credential-atw", required: true},
+      command: { value:"" },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "feed.png",
+    label: function() {
+      return "melcloud-connect-atw";
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="melcloud-connect-atw">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-globe"></i> Credentials</label>
+        <input type="text" id="node-input-server" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-command"><i class="fa fa-terminal"></i> Command</label>
+        <select id="node-input-command">
+            <option value="getListDevices">Devices list</option>
+        </select>
+    </div>
+</script>
+
+
+<script type="text/html" data-help-name="melcloud-connect-atw">
+    <p>A node to sets basic temperatures for Mitsubishi Melcloud connected air-to-water heat pumps</p>
+</script>

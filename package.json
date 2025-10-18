@@ -1,0 +1,37 @@
+{
+    "name": "node-red-contrib-melcloud-atw",
+    "version": "1.2.1",
+    "description": "Mitsubishi Melcloud API connection for Air-to-Water(ATW) devices",
+    "dependencies": {
+        "https": "^1.0.0",
+        "urllib": "^2.13.0"
+    },
+    "engines": {
+        "node": ">=5.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dwindey1/node-red-contrib-melcloud-atw.git"
+    },
+    "license": "MIT",
+    "keywords": [
+        "node-red",
+        "mitsubishi",
+        "melcloud",
+        "ecodan",
+        "air conditioning",
+        "heat pump",
+        "air-to-water"
+    ],
+    "node-red": {
+        "version": ">=2.0.0",
+        "nodes": {
+            "melcloud-connect-atw": "melcloud-connect-atw.js",
+            "sample": "sample/sample.json"
+        }
+    },
+    "author": {
+        "name": "Didier Windey",
+        "email": "dwindey1@gmail.com"
+    }
+}
