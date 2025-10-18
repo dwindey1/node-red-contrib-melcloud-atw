@@ -71,6 +71,16 @@ module.exports = function(RED) {
                             t2 = node.input_settemperaturezone2;
                         }
 
+                        var f1 = 40;
+                        if ( node.input_heatflowzone1 != null) {
+                            f1 = node.input_heatflowzone1;
+                        }
+
+                        var f2 = 30;
+                        if ( node.input_heatflowzone2 != null) {
+                            f2 = node.input_heatflowzone2;
+                        }
+
                         var tt = node.settanktemperature;
                         if ( node.input_settanktemperature != null) {
                             tt = node.input_settanktemperature;
@@ -112,6 +122,19 @@ module.exports = function(RED) {
                                 blnUpdated = true;
 
                             }
+                           if (f1 && f1 !== "") {
+                                console.log("set temperature flow 1= " + f1);
+                                device = SetHeatFlowTemperatureZone1(device, f1);
+                                blnUpdated = true;
+
+                            }
+                           if (f2 && f2 !== "") {
+                                console.log("set temperature flow 2= " + f2);
+                                device = SetHeatFlowTemperatureZone2(device, f2);
+                                blnUpdated = true;
+
+                            }
+
 
 
 
@@ -156,6 +179,8 @@ module.exports = function(RED) {
                 node.input_settemperaturezone2 = null;
                 node.input_settanktemperature = null;
                 node.input_forcehotwatermode = null;
+		node.input_heatflowzone1 = null;
+		node.input_heatflowzone2 = null;
                
 
                 if (msg.hasOwnProperty("device")) {
@@ -181,6 +206,14 @@ module.exports = function(RED) {
                         if (msg.device.command.hasOwnProperty("forcehotwatermode")) {
                             node.input_forcehotwatermode = msg.device.command.forcehotwatermode;
                         }
+                        if (msg.device.command.hasOwnProperty("heatflowzone1")) {
+                            node.input_heatflowzone1 = msg.device.command.heatflowzone1;
+                        }
+                        if (msg.device.command.hasOwnProperty("heatflowzone2")) {
+                            node.input_heatflowzone2 = msg.device.command.heatflowzone2;
+                        }
+
+
 
 
 

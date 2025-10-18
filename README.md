@@ -19,7 +19,7 @@ With a debug node find your buildingId and deviceId (under Structures > Devices)
 
 When calling this node most of the heatpump's parameters are published (under Structures > Devices > Devices).
 
-Only call the node with a maximum frequency of 5 minutes, otherwise some of the data will not get updated. 
+Only call the node with a maximum frequency of 15 minutes, otherwise some of the data will not get updated. 
 
 ![Alt text](parameters.png "Melcloud-parameters")
 
@@ -43,6 +43,25 @@ The node returns a list of actual parameters from the heatpump.
 Parameters can be provided from a function and send with a payload to the melcloud-device-atw node.
 Just privide the ID's and the parameter that needs to be published.
 If a parameter does not need to be publised, just leave it out. 
+Available parameters from a function send as
+
+msg.device ={
+    "buildingid": xxxx,
+    "deviceid": xxxx,
+"command":
+    {
+        "temperaturezone1" : integer,
+	"temperaturezone2" : integer,
+	"temperaturetank" : integer,
+	"forcehotwatermode" : boolean,
+	"heatflowzone1" : integer,
+	"heatflowzone2" : integer
+
+
+    }
+}
+return msg;
+
 
 ![Alt text](function.png "Melcloud-function")
 
