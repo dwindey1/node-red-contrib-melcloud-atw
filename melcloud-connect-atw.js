@@ -32,6 +32,9 @@ module.exports = function(RED) {
         node.settemperaturezone2 = n.settemperaturezone2;
         node.settanktemperature = n.settanktemperature;
         node.forcehotwatermode = n.forcehotwatermode;
+	node.power = n.power;
+	node.setheatflowzone1 = n.setheatflowzone1;
+	node.setheatflowzone2 = n.setheatflowzone2;
 
         node.credentials = RED.nodes.getNode(n.server);
 
@@ -71,26 +74,34 @@ module.exports = function(RED) {
                             t2 = node.input_settemperaturezone2;
                         }
 
-                        var f1 = 41;
-                        if ( node.input_heatflowzone1 != null) {
-                            f1 = node.input_heatflowzone1;
-                        }
-			console.log("flow temp f1= " + f1);
-
-
-                        var f2 = 31;
-                        if ( node.input_heatflowzone2 != null) {
-                            f2 = node.input_heatflowzone2;
-                        }
-			console.log("flow temp f2= " + f2);
                         var tt = node.settanktemperature;
                         if ( node.input_settanktemperature != null) {
                             tt = node.input_settanktemperature;
                         }
-                        var hwm = node.forcehotwatermode;
+                        
+			var hwm = node.forcehotwatermode;
                         if ( node.input_forcehotwatermode != null) {
                             hwm = node.input_forcehotwatermode;
                         }
+                        
+			var pwr = node.power;
+                        if ( node.input_power != null) {
+                            pwr = node.input_power;
+                        }
+			console.log("POWER 1" + pwr);
+                        
+			var hfz1 = node.setheatflowzone1;
+                        if ( node.input_setheatflowzone1 != null) {
+                            hfz1 = node.input_setheatflowzone1;
+                        }
+			console.log("HEAT FLOW ZONE 1 " + hfz1);
+
+			var hfz2 = node.setheatflowzone2;
+                        if ( node.input_setheatflowzone2 != null) {
+                            hfz2 = node.input_setheatflowzone2;
+                        }
+			console.log("HEAT FLOW ZONE 2 " + hfz2);
+
 
 
 
@@ -124,15 +135,21 @@ module.exports = function(RED) {
                                 blnUpdated = true;
 
                             }
-                           if (f1 && f1 !== "") {
-                                console.log("set temperature flow 1= " + f1);
-                                device = SetHeatFlowTemperatureZone1(device, f1);
+                           if (pwr && pwr !== "") {
+                                console.log("power = " + pwr);
+                                device = Power(device, pwr);
                                 blnUpdated = true;
 
                             }
-                           if (f2 && f2 !== "") {
-                                console.log("set temperature flow 2= " + f2);
-                                device = SetHeatFlowTemperatureZone2(device, f2);
+                           if (hfz1 && hfz1 !== "") {
+                                console.log("heat zone flow 1 = " + hfz1);
+                                device = SetHeatFlowTemperatureZone1(device, hfz1);
+                                blnUpdated = true;
+
+                            }
+                           if (hfz2 && hfz2 !== "") {
+                                console.log("heat zone flow 2 = " + hfz2);
+                                device = SetHeatFlowTemperatureZone2(device, hfz2);
                                 blnUpdated = true;
 
                             }
@@ -148,13 +165,14 @@ module.exports = function(RED) {
 
                             if (blnUpdated) {
                                 device = await melcloud.putDeviceInfo(device);
+				console.log(device);
                                 node.send(device);
-                                node.status({ text: "Temp : " + device.payload.RoomTemperature + " Â°C"});
+                                node.status({ text: "Temp : " + device.payload.RoomTemperature + " °C"});
                                 return; 
                             }
-
+			    console.log(device);
                             node.send(device);
-                            node.status({ text: "Temp : " + device.payload.RoomTemperature  + " Â°C"});
+                            node.status({ text: "Temp : " + device.payload.RoomTemperature  + " °C"});
                         }).catch(err => {
                             node.error(err);
                             node.status({ fill: "red", shape: "dot", text: err });
@@ -181,8 +199,10 @@ module.exports = function(RED) {
                 node.input_settemperaturezone2 = null;
                 node.input_settanktemperature = null;
                 node.input_forcehotwatermode = null;
-		node.input_heatflowzone1 = null;
-		node.input_heatflowzone2 = null;
+		node.input_setheatflowzone1 = null;
+		node.input_setheatflowzone2 = null;
+
+		node.input_power = null;
                
 
                 if (msg.hasOwnProperty("device")) {
@@ -198,6 +218,7 @@ module.exports = function(RED) {
 
                         if (msg.device.command.hasOwnProperty("temperaturezone1")) {
                             node.input_settemperaturezone1 = msg.device.command.temperaturezone1;
+			    console.log("temp1 via property");
                         }
                         if (msg.device.command.hasOwnProperty("temperaturezone2")) {
                             node.input_settemperaturezone2 = msg.device.command.temperaturezone2;
@@ -208,11 +229,17 @@ module.exports = function(RED) {
                         if (msg.device.command.hasOwnProperty("forcehotwatermode")) {
                             node.input_forcehotwatermode = msg.device.command.forcehotwatermode;
                         }
+                        if (msg.device.command.hasOwnProperty("power")) {
+                            node.input_power = msg.device.command.power;
+			    console.log("POWER via property");
+                        }
                         if (msg.device.command.hasOwnProperty("heatflowzone1")) {
-                            node.input_heatflowzone1 = msg.device.command.heatflowzone1;
+                            node.input_setheatflowzone1 = msg.device.command.heatflowzone1;
+			    console.log("heatflow1 via property");
                         }
                         if (msg.device.command.hasOwnProperty("heatflowzone2")) {
-                            node.input_heatflowzone2 = msg.device.command.heatflowzone2;
+                            node.input_setheatflowzone2 = msg.device.command.heatflowzone2;
+			    console.log("heatflow2 via property");
                         }
 
 
@@ -288,6 +315,7 @@ module.exports = function(RED) {
         device.payload.SetTemperatureZone1 = Number.parseFloat(temperaturezone1);
         device.payload.HasPendingCommand = true;
         device.payload.EffectiveFlags = device.payload.EffectiveFlags + 8589934720;
+	console.log("TEMPERATUUR");
         
         return device;
 
@@ -383,6 +411,7 @@ module.exports = function(RED) {
         device.payload.Power = power;
         device.payload.HasPendingCommand = true;
         device.payload.EffectiveFlags = device.payload.EffectiveFlags + 1;
+	console.log("POWER");
         return device;
 
     }
