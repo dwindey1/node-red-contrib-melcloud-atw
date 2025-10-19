@@ -1,6 +1,6 @@
 {
     "name": "node-red-contrib-melcloud-atw",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "description": "Mitsubishi Melcloud API connection for Air-to-Water(ATW) devices",
     "dependencies": {
         "https": "^1.0.0",

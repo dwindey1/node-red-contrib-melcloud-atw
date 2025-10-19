@@ -71,16 +71,18 @@ module.exports = function(RED) {
                             t2 = node.input_settemperaturezone2;
                         }
 
-                        var f1 = 40;
+                        var f1 = 41;
                         if ( node.input_heatflowzone1 != null) {
                             f1 = node.input_heatflowzone1;
                         }
+			console.log("flow temp f1= " + f1);
 
-                        var f2 = 30;
+
+                        var f2 = 31;
                         if ( node.input_heatflowzone2 != null) {
                             f2 = node.input_heatflowzone2;
                         }
-
+			console.log("flow temp f2= " + f2);
                         var tt = node.settanktemperature;
                         if ( node.input_settanktemperature != null) {
                             tt = node.input_settanktemperature;
